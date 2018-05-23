@@ -1,4 +1,3 @@
-const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const webpack = require('webpack');
@@ -9,11 +8,9 @@ module.exports = {
     },
     module: {
         rules: [
-            {
-                test: /\.tsx?$/,
-                use: 'ts-loader',
-                exclude: /node_modules/
-            }
+            { test: /\.tsx?$/, use: 'ts-loader', exclude: /node_modules/ },
+            { test: /\.(png|svg|jpg|gif)$/, use: ['file-loader'] },
+            { test: /\.(woff|woff2|eot|ttf|otf)$/, use: ['file-loader'] }
         ]
     },
     resolve: {
@@ -22,11 +19,18 @@ module.exports = {
     optimization: {
         splitChunks: {
             cacheGroups: {
+                react: {
+                    test: /\/(react|react-dom|fbjs|object-assign)\//,
+                    chunks: "initial",
+                    name: "react",
+                    priority: 1000,
+                    enforce: true
+                },
                 vendor: {
                     test: /node_modules/,
                     chunks: "initial",
                     name: "vendor",
-                    priority: 10,
+                    priority: -1,
                     enforce: true
                 }
             }
@@ -35,26 +39,9 @@ module.exports = {
     plugins: [
         new CleanWebpackPlugin(['dist']),
         new HtmlWebpackPlugin({
-            title: 'Open layer'
-        }),
-        new webpack.NamedModulesPlugin(),
-        new webpack.HotModuleReplacementPlugin(),
-        new webpack.LoaderOptionsPlugin({
-            options: {
-                splitChunks: {
-                    cacheGroups: {
-                        commons: {
-                            test: /[\\/]node_modules[\\/]/,
-                            name: "vendors",
-                            chunks: "all"
-                        }
-                    }
-                }
-            }
+            title: 'Application',
+            appMountId: 'app',
+            template: 'index.html'
         })
-    ],
-    output: {
-        path: path.resolve(__dirname, 'dist'),
-        filename: "[name].js"
-    }
+    ]
 };

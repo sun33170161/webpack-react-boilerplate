@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>
+        <%= htmlWebpackPlugin.options.title %>
+    </title>
+</head>
+
+<body>
+    <% if (htmlWebpackPlugin.options.appMountId) { %>
+    <div id='<%= htmlWebpackPlugin.options.appMountId %>' />
+    <% } %>
+</body>
+
+</html>
